@@ -1,7 +1,7 @@
 # Battleships Game
 ## Descriptiom 
 
-The program will be using a GUI using the Pygame library and will use OOP.
+The program will be written in Python and will use a TUI and Object Oriented Programming. A GUI was not feasable due to being unable to preview it in a cloud based environment.
 
 There are two players. Each has seven ships.
 - 1x Aircraft carrier   (5 squares)
