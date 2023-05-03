@@ -56,3 +56,26 @@ The data structures used in the game are:
 - `Integers` - Used to store the player's score and the ship sizes
 - `Strings` - Used to store the player's name and the ship names
 
+
+---
+## SECTION 2: Creating the solution (30 marks)
+
+### Explain sections of your code
+
+---
+
+## SECTION 3: Testing the solution (21 marks)
+
+### Tests
+#### Must include: `test`, `test_data`, `data_type`, `expected_result`, `actual_result`, `pass/fail`
+
+| Test | Test Data     | Data Type | Expected Result | Actual Result | Outcome |
+|------|---------------|-----------|-----------------|---------------|:-------:|
+| `placeholder` | `placeholder` | `placeholder` | `placeholder` | `placeholder` | `placeholder` |
+
+
+### Evidence of testing
+
+## SECTION 4: Potential enhancements and refinements (10 marks)
+
+
