@@ -103,7 +103,6 @@ class Ship:
     def is_sunk(self):
         return self.hits == self.size
 ```
-
 ```python
 
 class Board:
