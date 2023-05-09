@@ -8,7 +8,7 @@ from colorama import Fore, Style
 # GLOBAL VARIABLES
 SHIP_SIZES = [5, 4, 3, 3, 2]
 SHIP_NAMES = ['Carrier', 'Battleship', 'Cruiser', 'Submarine', 'Destroyer']
-SYMBOLS = ['S', 'X', '-', 'O', ' ']
+SYMBOLS = ['S', 'X', '+', 'O', ' ']
 DEV_MODE = True
 
 # COLORS
@@ -16,9 +16,8 @@ colorama.init()
 COLORS = [Fore.RED, Fore.GREEN, Fore.BLUE, Fore.YELLOW, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
 
 if DEV_MODE:
-    print('DEV MODE ON!')
+    print('Dev mode is active')
     print(' > Ships will be placed automatically.')
-
 
 # GLOBAL FUNCTIONS
 
@@ -131,21 +130,10 @@ class Player:
         for i, size in enumerate(ship_sizes):
 
             if DEV_MODE:
-
-                if i == 0:
-                    self.board.place_ship(Ship(SHIP_NAMES[i], size), 0, 0, 'h')
-                elif i == 1:
-                    self.board.place_ship(Ship(SHIP_NAMES[i], size), 1, 0, 'h')
-                elif i == 2:
-                    self.board.place_ship(Ship(SHIP_NAMES[i], size), 2, 0, 'h')
-                elif i == 3:
-                    self.board.place_ship(Ship(SHIP_NAMES[i], size), 3, 0, 'h')
-                elif i == 4:
-                    self.board.place_ship(Ship(SHIP_NAMES[i], size), 4, 0, 'h')
-                else:
-                    pass
-
+                self.board.place_ship(Ship(SHIP_NAMES[i], size), i, 0, 'h')
                 continue
+
+
 
             while True:
                 print(f'Place your {SHIP_NAMES[i]} ({size} spaces):')
@@ -153,11 +141,12 @@ class Player:
                 row, col = int(row), int(col)
                 if direction.lower() == 'h':
                     if col + size > 10:
-                        print('> Ship goes off the board, try again.')
+                        print('> Ship is off the board, try again.')
                         continue
+
                 else:
                     if row + size > 10:
-                        print('> Ship goes off the board, try again.')
+                        print('> Ship u off the board, try again.')
                         continue
                 ship = Ship(SHIP_NAMES[i], size)
                 if self.board.place_ship(ship, row, col, direction):
@@ -220,9 +209,10 @@ class Game:
         pass
 
 
-# Test player class
-players = [Player('Player 1'), Player('Player 2')]
+if DEV_MODE: 
+    # Test player class
+    players = [Player('Player 1'), Player('Player 2')]
 
-for player in players:
-    player.place_ships(SHIP_SIZES)
-    player.print_board()
+    for player in players:
+        player.place_ships(SHIP_SIZES)
+        player.print_board()
