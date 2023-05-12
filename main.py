@@ -16,7 +16,7 @@ colorama.init()
 COLORS = [Fore.RED, Fore.GREEN, Fore.BLUE, Fore.YELLOW, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
 
 if DEV_MODE:
-    print('Dev mode is active')
+    print('Dev mode is active!!')
     print(' > Ships will be placed automatically.')
 
 # GLOBAL FUNCTIONS
@@ -44,7 +44,6 @@ class Ship:
     # taken is equal to the size of the ship, otherwise False returned
     def is_sunk(self):
         return self.hits == self.size
-
 
 class Board:
 
@@ -200,7 +199,6 @@ class Player:
         print(colours[0] + '  0 1 2 3 4 5 6 7 8 9' + Style.RESET_ALL)
         print()
 
-
 class Game:
     def __init__(self, players):
         self.players = players
@@ -209,8 +207,32 @@ class Game:
         pass
 
 
+# Menus
+
+class Menu:
+    def __init__(self):
+        self.players = []
+
+    def show_menu(title, array):
+
+        print(title)
+        for i, item in enumerate(array):
+            print(f'{i + 1}. {item}')
+
+        try:
+            choice = int(input('> '))
+            if choice < 1 or choice > len(array):
+                raise ValueError
+            
+            return choice
+        
+        except ValueError:
+            print('> Invalid input, try again.')
+            return self.show_menu(title, array)
+
+print(Menu.show_menu('Main Menu', ['Local Multiplayer', 'Single Player vs AI', 'Online Multiplayer', 'Quit']))
+
 if DEV_MODE: 
-    # Test player class
     players = [Player('Player 1'), Player('Player 2')]
 
     for player in players:
