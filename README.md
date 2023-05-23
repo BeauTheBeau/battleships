@@ -21,6 +21,7 @@ single-player vs AI, and online multiplayer modes.
 
 ## SECTION 1: Designing the solution  (9 marks)
 
+
 ### The Introduction
 
 The problem I am trying to solve is to create a Battleships game that can be played by two players locally, or by one
@@ -74,65 +75,53 @@ The data structures used in the game are:
 
 
 ---
+
 ## SECTION 2: Creating the solution (30 marks)
 
 ### Explain sections of your code
 
+
+#### things
+
 ```python
-class Ship:
-    
-    # __init__ method: Called when a new instance of the class is created. It takes three parameters:
-    #   - name: The name of the ship
-    #   - size: The size of the ship
-    #   - hits: The number of hits the ship has taken
-    # It sets the name, size and hits attributes of the ship to the values passed in as parameters.
-    # also setting the sunk attribute of the ship to False. 
-    def __init__(self, name, size):
-        self.name = name
-        self.size = size
-        self.hits = 0
+# INTITIATION!!!
 
-    # __str__ method: Called when the print() function is called on an instance of the class. It returns a string
-    # containing the name and size of the ship.
-        
-    def __str__(self):
-        return f'{self.name} ({self.size} spaces)'
+# Importing modules
+import colorama
+import numpy as np
+from colorama import Fore, Style
+import random
+import argparse 
 
-    # is_sunk method: Called to check if the ship has been sunk. It returns True if the number of hits the ship has
-    # taken is equal to the size of the ship, otherwise False returned
-    def is_sunk(self):
-        return self.hits == self.size
+# Global variables
+SHIP_SIZES = [5, 4, 3, 3, 2]
+SHIP_NAMES = ['Carrier', 'Battleship', 'Cruiser', 'Submarine', 'Destroyer']
+SYMBOLS = ['S', 'X', '+', 'O', ' ']
+DEV_MODE = False
+
+# Flags
+parser = argparse.ArgumentParser(description='Battleships game.')
+parser.add_argument('--dev', action='store_true', help='Enable developer mode')
+args = parser.parse_args()
+DEV_MODE = args.dev
+
+# Init colorama for colored outputs
+colorama.init()
 ```
-```python
 
+
+#### Classes
+
+##### Board
+```python
+# Board class
 class Board:
-  
-    # __init__ method: Called when a new instance of the class is created. It takes two parameters:
-    #   - rows: The number of rows on the board
-    #   - cols: The number of columns on the board
-    # It sets the rows and cols attributes of the board to the values passed in as parameters, and creates a grid
-    # of zeros with the size of the board.
-  
     def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
         self.grid = np.zeros((rows, cols), dtype=int)
         self.ships = []
 
-    # __str__ method: Called when the print() function is called on an instance of the class. It returns a string
-    # containing the grid of the board.
-        
-    def __str__(self):
-        return str(self.grid)
-        
-    # place_ship method: Called to place a ship on the board. It takes four parameters:
-    #   - ship: The ship to be placed
-    #   - row: The row to place the ship on
-    #   - col: The column to place the ship on
-    #   - direction: The direction to place the ship in
-    # It checks if the ship can be placed on the board, and if it can, it places the ship on the board and returns
-    # True. If it can't, it returns False.
-    
     def place_ship(self, ship, row, col, direction):
         if direction == 'h':
             for c in range(col, col + ship.size):
@@ -142,8 +131,7 @@ class Board:
                 self.grid[row][c] = len(self.ships) + 1
             self.ships.append(ship)
             return True
-
-        else:          
+        else:
             for r in range(row, row + ship.size):
                 if r >= self.rows or self.grid[r][col] != 0:
                     return False
@@ -152,12 +140,6 @@ class Board:
             self.ships.append(ship)
             return True
 
-        
-    # fire_shot method: Called to fire a shot at a position on the board. It takes two parameters:
-    #   - row: The row to fire the shot at
-    #   - col: The column to fire the shot at
-    # Checks if the shot is a hit or a miss, and returns True if it is a hit, otherwise False.
-    
     def fire_shot(self, row, col):
         if self.grid[row][col] == 0:
             self.grid[row][col] = -1
@@ -167,9 +149,6 @@ class Board:
             ship.hits += 1
             self.grid[row][col] = -2
             return True
-        
-    # is_game_over method: Called to check if the game is over. It returns True if all the ships on the board have
-    # been sunk, otherwise returns False.
 
     def is_game_over(self):
         for ship in self.ships:
@@ -178,10 +157,231 @@ class Board:
         return True
 ```
 
+##### Player class
+```python
+# Player class
+class Player:
 
+    # Initiailsie the player and create a baordc for them
+    def __init__(self, name):
+        self.name = name
+        self.board = Board(10, 10) 
 
+    def place_ships(self, ship_sizes):
+        print(f'{self.name.upper()}, place your ships on the board.\n')
+
+        for i, size in enumerate(ship_sizes): # Loop through each possible ship
+        
+            # Place automatically if dev mode is enabled
+            if DEV_MODE:
+                self.board.place_ship(Ship(SHIP_NAMES[i], size), i, 0, 'h')
+                continue
+
+            while True:
+                try: 
+                    # Take row, col and direction
+                    print(f'Place your {SHIP_NAMES[i]} ({size} spaces):')
+                    # row, col, direction = input('> Enter row, column, and direction (h or v): ').split()
+                    # row, col = int(row), int(col)
+
+                    # Take row and col
+                    print(f'> Place your {SHIP_NAMES[i]} ({size} spaces):')
+                    print(f'> EXAMPLE: 0 5')
+                    row, col = map(int, input('> Enter row and column: ').split())
+
+                    # Show menu for direction
+                    direction = Menu.show_menu('Choose direction', ['Horizontally', 'Vertically'])
+                    direction = 'h' if direction == 1 else 'v' # validate the users input and convert to h or v
+
+                    if direction.lower() == 'h':
+                        if col + size > 10:
+                            print('> Ship is off the board, try again.')
+                            continue
+                    else:
+                        if row + size > 10:
+                            print('> Ship is off the board, try again.')
+                            continue
+
+                    ship = Ship(SHIP_NAMES[i], size)
+
+                    if self.board.place_ship(ship, row, col, direction):
+                        print(f'> Your {SHIP_NAMES[i]} has been placed at ({row}, {col}) going {direction.replace("h", "horizontally").replace("v", "vertically")}.')
+                        print()
+
+                        # Print board
+                        self.print_board()                        
+
+                        break
+                    else:
+                        print('> There is already a ship in the way, try again.')
+                        print()
+
+                # If the user enters an invalid input, such as a string
+                except ValueError: 
+                    print('> Invalid input, try again.')
+                    print()
+
+    # print the player's own baord, with ships, hits and etc. 
+    def print_board(self): 
+        colours = [Fore.RED, Fore.GREEN, Fore.BLUE, Fore.YELLOW, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
+
+        for i, row in enumerate(self.board.grid):
+            print(i, end=' ')
+            for col in row:
+                if col == 0 or col == -1:
+                    print('-', end=' ')
+                elif col == -2:
+                    print('X', end=' ')
+                else:
+                    print(colours[col - 1] + 'S' + Style.RESET_ALL, end=' ')
+            print()
+        print(colours[0] + '  0 1 2 3 4 5 6 7 8 9' + Style.RESET_ALL)
+        print()
+
+    # print the player's opponent's board, with only hits and misses
+    def print_board_opponent(self):
+        colours = [Fore.RED, Fore.GREEN, Fore.BLUE, Fore.YELLOW, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
+
+        for i, row in enumerate(self.board.grid):
+            print(i, end=' ')
+            for col in row:
+                if col == 0 or col == -1:
+                    print('-', end=' ')
+                elif col == -2:
+                    print('X', end=' ')
+                else:
+                    print('-', end=' ')
+            print()
+        print(colours[0] + '  0 1 2 3 4 5 6 7 8 9' + Style.RESET_ALL)
+```
+
+##### Ship class
+```python
+# AI class
+class AIPlayer(Player):
+
+    # Initialise the class
+    def __init__(self):
+        super().__init__('AI')
+
+    # Randoml;y place all ships on the board
+    def place_ships(self, ship_sizes):
+        for i, size in enumerate(ship_sizes):
+            while True:
+                row = random.randint(0, 9)
+                col = random.randint(0, 9)
+                direction = random.choice(['h', 'v'])
+                ship = Ship(SHIP_NAMES[i], size)
+                if self.board.place_ship(ship, row, col, direction):
+                    break
+
+    # Fire a shot at the opponent
+    def fire_shot(self):
+        while True:
+            row = random.randint(0, 9)
+            col = random.randint(0, 9)
+            if self.board.grid[row][col] == 0 or self.board.grid[row][col] == -1:
+                break
+        return row, col
+```
+
+##### Game class
+```python
+# Game class
+class Game:
+    # Initialise the game and create the players
+    def __init__(self, players):
+        self.players = players
+
+    # LET THE GAME BEGIN!!! (game begins)
+    def play(self):
+        current_player = 0
+        opponent_player = 1
+
+        # turn handling
+        while True:
+            print(f"{self.players[current_player].name}'s turn:")
+            print("Your Board:")
+            self.players[current_player].print_board()
+            print("Opponent's Board:")
+            self.players[opponent_player].print_board_opponent()
+
+            while True:
+                # Make the player pick a shot
+                # If the player is an AI, the AI will pick a shot
+
+                try:
+                    row, col = map(int, input("Enter row and column to fire a shot: ").split())
+                    if row < 0 or row > 9 or col < 0 or col > 9:
+                        raise ValueError
+                    break
+                except ValueError: 
+                    # if input is a string, not an int, then it will raise a ValueError and 
+                    # the user will be asked to try again
+                    print("> Invalid input, try again.")
+                    print()
+
+            # check if is a hit 
+            hit = self.players[opponent_player].board.fire_shot(row, col)
+
+            if hit:
+                print("> Hit!")
+                if self.players[opponent_player].board.is_game_over():
+                    print(f"\n{self.players[current_player].name} wins!")
+                    return
+            else:
+                print("> Miss!")
+
+            current_player, opponent_player = opponent_player, current_player
+            print()
+```
 
 ---
+
+#### Functions
+```python
+def main():
+    menu_choice = Menu.show_menu('Main Menu', ['Local Multiplayer', 'Single Player vs AI', 'Quit'])
+
+    # Local multiplayer
+    if menu_choice == 1:
+        player1_name = input("> Enter Player 1's name: ")
+        player2_name = input("> Enter Player 2's name: ")
+
+        player1 = Player(player1_name)
+        player2 = Player(player2_name)
+
+        player1.place_ships(SHIP_SIZES)
+        player2.place_ships(SHIP_SIZES)
+
+        game = Game([player1, player2])
+        game.play()
+
+    # Single player vs AI
+    elif menu_choice == 2:
+        player_name = input("Enter your name: ")
+
+        # Create players and ships for ai and non-ai
+        player = Player(player_name) 
+        player.place_ships(SHIP_SIZES) 
+
+        ai = AIPlayer()
+        ai.place_ships(SHIP_SIZES)
+
+        # Create game and play
+        game = Game([player, ai])
+        game.play()
+
+    # Quit
+    print("Goodbye!")
+```
+
+```python
+# Entry point
+if __name__ == '__main__':
+    main()
+```
+
 
 ## SECTION 3: Testing the solution (21 marks)
 

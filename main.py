@@ -2,15 +2,42 @@ import colorama
 import numpy as np
 from colorama import Fore, Style
 import random
+import argparse
 
 # Global variables
 SHIP_SIZES = [5, 4, 3, 3, 2]
 SHIP_NAMES = ['Carrier', 'Battleship', 'Cruiser', 'Submarine', 'Destroyer']
 SYMBOLS = ['S', 'X', '+', 'O', ' ']
-DEV_MODE = True
+DEV_MODE = False
+
+# Flags
+parser = argparse.ArgumentParser(description='Battleships game.')
+parser.add_argument('--dev', action='store_true', help='Enable developer mode')
+args = parser.parse_args()
+DEV_MODE = args.dev
 
 # Init colorama for colored outputs
 colorama.init()
+
+# ========================
+# Classes
+# ========================
+
+# Menu class
+class Menu:
+    @staticmethod
+    def show_menu(title, array):
+        print(title)
+        for i, item in enumerate(array):
+            print(f'{i + 1}. {item}')
+        try:
+            choice = int(input('> '))
+            if choice < 1 or choice > len(array):
+                raise ValueError
+            return choice
+        except ValueError:
+            print('> Invalid input, try again.')
+            return Menu.show_menu(title, array)
 
 # Ship class
 class Ship:
@@ -86,8 +113,18 @@ class Player:
             while True:
                 try: 
                     print(f'Place your {SHIP_NAMES[i]} ({size} spaces):')
-                    row, col, direction = input('> Enter row, column, and direction (h or v): ').split()
-                    row, col = int(row), int(col)
+                    # row, col, direction = input('> Enter row, column, and direction (h or v): ').split()
+                    # row, col = int(row), int(col)
+
+                    # Take row and col
+                    print(f'> Place your {SHIP_NAMES[i]} ({size} spaces):')
+                    print(f'> EXAMPLE: 0 5')
+                    row, col = map(int, input('> Enter row and column: ').split())
+
+                    # Show menu for direction
+                    direction = Menu.show_menu('Choose direction', ['Horizontally', 'Vertically'])
+                    direction = 'h' if direction == 1 else 'v'
+
                     if direction.lower() == 'h':
                         if col + size > 10:
                             print('> Ship is off the board, try again.')
@@ -206,28 +243,17 @@ class Game:
             current_player, opponent_player = opponent_player, current_player
             print()
 
-# Menu class
-class Menu:
-    @staticmethod
-    def show_menu(title, array):
-        print(title)
-        for i, item in enumerate(array):
-            print(f'{i + 1}. {item}')
-        try:
-            choice = int(input('> '))
-            if choice < 1 or choice > len(array):
-                raise ValueError
-            return choice
-        except ValueError:
-            print('> Invalid input, try again.')
-            return Menu.show_menu(title, array)
+
+# ========================
+# Main
+# ========================
 
 def main():
     menu_choice = Menu.show_menu('Main Menu', ['Local Multiplayer', 'Single Player vs AI', 'Quit'])
 
     if menu_choice == 1:
-        player1_name = input("Enter Player 1's name: ")
-        player2_name = input("Enter Player 2's name: ")
+        player1_name = input("> Enter Player 1's name: ")
+        player2_name = input("> Enter Player 2's name: ")
 
         player1 = Player(player1_name)
         player2 = Player(player2_name)
