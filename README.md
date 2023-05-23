@@ -39,13 +39,13 @@ their score. The board class will contain the attributes of the board, such as t
 
 ### Success Criteria
 
-- [ ] The game must be able to be played by two players locally
-- [ ] The game must be able to be played by one player against an AI
-- [ ] The game must be able to be played on a 10x10 grid
-- [ ] The game must have 5 ships of different sizes
-- [ ] The game must be created using Object-Oriented Programming
-- [ ] The game must have an easy-to-use interface for the players
-- [ ] The game must have a main menu with options for the players to choose from
+- [X] The game must be able to be played by two players locally
+- [X] The game must be able to be played by one player against an AI
+- [X] The game must be able to be played on a 10x10 grid
+- [X] The game must have 5 ships of different sizes
+- [X] The game must be created using Object-Oriented Programming
+- [X] The game must have an easy-to-use interface for the players
+- [X] The game must have a main menu with options for the players to choose from
 
 ### Variables and Data Structures
 
