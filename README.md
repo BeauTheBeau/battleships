@@ -393,6 +393,7 @@ if __name__ == '__main__':
 | Test whether AI's ship can go off board | Ship placed at (9, 9) with direction 'v' | Ship | Ship cannot be placed | Ship cannot be placed | Pass |
 | Test whether PLAYER's ship can be placed on top of another ship | Ship placed at (0, 0) with direction 'h' | Ship | Ship cannot be placed | Ship cannot be placed | Pass |
 | Test whether AI's ship can be placed on top of another ship | Ship placed at (0, 0) with direction 'v' | Ship | Ship cannot be placed | Ship cannot be placed | Pass |
+| Test whether the PLAYER can fire a shot and miss | Fire a shot at (3, 3) | Shot | Shot fired, X added | Shot fired, X added | Pass |
 
 
 ### Evidence of testing
@@ -403,6 +404,9 @@ if __name__ == '__main__':
 
 #### Test 3 && 4 
 ![Alt text](image-1.png)
+
+#### Test 5 && 6
+![Alt text](image-2.png)
 
 
 ## SECTION 4: Potential enhancements and refinements (10 marks)
