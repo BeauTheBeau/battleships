@@ -386,15 +386,38 @@ if __name__ == '__main__':
 ## SECTION 3: Testing the solution (21 marks)
 
 ### Tests
-#### Must include: `test`, `test_data`, `data_type`, `expected_result`, `actual_result`, `pass/fail`
 
 | Test | Test Data     | Data Type | Expected Result | Actual Result | Outcome |
 |------|---------------|-----------|-----------------|---------------|:-------:|
-| `placeholder` | `placeholder` | `placeholder` | `placeholder` | `placeholder` | `placeholder` |
+| Test whether PLAYER's ship can go off board | Ship placed at (9, 9) with direction 'h' | Ship | Ship cannot be placed | Ship cannot be placed | Pass | 
+| Test whether AI's ship can go off board | Ship placed at (9, 9) with direction 'v' | Ship | Ship cannot be placed | Ship cannot be placed | Pass |
+| Test whether PLAYER's ship can be placed on top of another ship | Ship placed at (0, 0) with direction 'h' | Ship | Ship cannot be placed | Ship cannot be placed | Pass |
+| Test whether AI's ship can be placed on top of another ship | Ship placed at (0, 0) with direction 'v' | Ship | Ship cannot be placed | Ship cannot be placed | Pass |
 
 
 ### Evidence of testing
 
+
+#### Test 1 && 2 
+![Alt text](image.png)
+
+#### Test 3 && 4 
+![Alt text](image-1.png)
+
+
 ## SECTION 4: Potential enhancements and refinements (10 marks)
 
+- Potetntial enhacnements are improvements to the user experience, it may not be entirely 
+clear to the user how to place a ship etc. 
 
+- More input validation could be added in more places, such as when the user is being asked to place a ship. 
+ 
+- A settings option could be added to the main menu, where the user can change attributes of the game, such as the size of the board, the number / size of ships and etc. 
+
+- Online multiplayer was initially planned, but dropped due to time constraints, this could be added in the future.
+
+- A GUI could be added to the game, to make it more user friendly and easier to use.
+
+- The "AI" is incredibly basic, simply using a random number generator. Instead, a machine learning algorithm could be trained to play the game, and the user could play against that ML algorithm 
+
+- A leaderboard could be added, where the user can see their previous scores and compare them to other players (if online multiplayer is added)

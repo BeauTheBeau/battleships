@@ -113,7 +113,7 @@ class Player:
             while True:
                 try: 
                     print(f'Place your {SHIP_NAMES[i]} ({size} spaces):')
-                    # row, col, direction = input('> Enter row, column, and direction (h or v): ').split()
+                    row, col, direction = input('> Enter row, column, and direction (h or v): ').split()
                     # row, col = int(row), int(col)
 
                     # Take row and col
